@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCumpoDescontosTable extends Migration
+class CreateCupomDescontosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCumpoDescontosTable extends Migration
      */
     public function up()
     {
-        Schema::create('cumpo_descontos', function (Blueprint $table) {
+        Schema::create('cupom_descontos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('localizador')->unique();
@@ -34,6 +34,6 @@ class CreateCumpoDescontosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cumpo_descontos');
+        Schema::dropIfExists('cupom_descontos');
     }
 }

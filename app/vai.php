@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CumpoDesconto extends Model
+class vai extends Model
 {
     //
 }

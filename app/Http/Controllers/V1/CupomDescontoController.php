@@ -4,9 +4,16 @@ namespace App\Http\Controllers\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CupomDesconto;
 
 class CupomDescontoController extends Controller
 {
+    private $cupomDesconto;
+
+     public function  __construct(CupomDesconto $cupomDesconto)
+    {
+        $this->cupomDesconto = $cupomDesconto;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class CupomDescontoController extends Controller
      */
     public function index()
     {
-        //
+        $cupomDescontos = $this->cupomDesconto->all();
+
+        return view('painel.cupom_desconto.index', compact('cupomDescontos'));
     }
 
     /**
@@ -35,7 +44,23 @@ class CupomDescontoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dataForm = $request->all();
+
+       $create = $this->cupomDesconto->create($dataForm);
+
+       if($create) {
+
+        session()->flash('success', 'Cadastro realizado com sucesso .');
+
+        return back();
+
+       } else {
+
+        session()->flash('error', 'Erro ao tentar cadastrar !');
+
+        return back('produto/lista');
+
+       }
     }
 
     /**

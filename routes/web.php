@@ -23,4 +23,7 @@ Route::group(['prefix' => 'MyShopp', 'namespace' => 'V1'], function () {
     //Criando ROTA para o controller ProdutoController
     Route::get('produto/lista', 'ProdutoController@index')->name('produto.lista');
     Route::post('produto/store', 'ProdutoController@store')->name('produto.store');
+
+    Route::get('cupom/desconto/listar', 'CupomDescontoController@index')->name('cupom.desconto.listar');
+    Route::post('cupom/desconto/store', 'CupomDescontoController@store')->name('cupom.desconto.store');
 });

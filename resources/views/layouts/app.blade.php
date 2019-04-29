@@ -45,7 +45,7 @@
                               </a>
                               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                               <a class="dropdown-item" href="{{route('produto.lista')}}">Protudo</a>
-                                <a class="dropdown-item" href="#">Cupom de descomto</a>
+                                <a class="dropdown-item" href="{{route('cupom.desconto.listar')}}">Cupom de descomto</a>
                               </div>
                             </li>
                             

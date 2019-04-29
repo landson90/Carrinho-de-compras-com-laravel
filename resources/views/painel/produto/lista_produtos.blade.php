@@ -1,6 +1,7 @@
 @extends('home')
 
 @section('content')
+
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -8,6 +9,30 @@
         <li class="breadcrumb-item active" aria-current="page">Produtos</li>
       </ol>
     </nav>
+
+
+@if(session()->has('success'))
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-info">
+            <button type="button"  class="close" aria-label="Close" data-dismiss="alert" aria-hidden="true">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>{{session()->get('success')}}</strong>
+        </div>
+    </div>
+  </div>
+@endif
+  
+@if(session()->has('error'))
+  <div class="row">
+    <div class="alert alert-danger">
+      <button type="button" class="close glyphicon glyphicon-remove" data-dismiss="alert" aria-hidden="true"></button>
+      <strong>{{session()->get('error')}}</strong>
+    </div>
+  </div>
+@endif
+  
   <div class="card">
       <div class="card-header">
       Produtos <button type="button" class="btn btn-info" id="btnCreate" data-toggle="modal" data-target="#exampleModal">Novo</button>
@@ -20,17 +45,28 @@
               <th scope="col">Nome</th>
               <th scope="col">Descricao</th>
               <th scope="col">Valor</th>
+              <th scope="col">Status Ativo</th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody>
+            @forelse ($produtos as $produto)
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>1</td>
-              <td>1</td>
-            </tr>
+              <th scope="row">{{$produto->id}}</th>
+              <td>{{$produto->nome}}</td>
+              <td>{{$produto->descricao}}</td>
+              <td>{{$produto->valor}}</td>
+              <td>{{$produto->ativo}}</td>
+              <td>
+                  <a href="#" class="badge badge-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                  <a href="#" class="badge badge-warning"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                  <a href="#" class="badge badge-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+              </td>
+            </tr>  
+            @empty
+                <h2>Não tem produtos cadastrado !</h2>
+            @endforelse
+            
           </tbody>
         </table>
       </div>
@@ -66,7 +102,7 @@
           <div class="row mt-4">
             <div class="col-lg-6">
               <label for="valor">Valor</label>
-              <input type="text" class="form-control" name="valor" placeholder="Digite o valor (EX:. 59,99)">
+              <input type="text" class="form-control" name="valor" placeholder="Digite o valor (EX:. 59.99)">
             </div>
             <div class="col-lg-6">
               <h5>Status de <b>Ativo</b></h5>

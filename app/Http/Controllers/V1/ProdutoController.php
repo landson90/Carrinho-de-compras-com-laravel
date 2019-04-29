@@ -21,7 +21,8 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        return view('painel.produto.lista_produtos');
+        $produtos = $this->produto->all();
+        return view('painel.produto.lista_produtos', compact('produtos'));
     }
 
     /**
@@ -42,7 +43,18 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        return dd($request->all());
+       $dataForm = $request->all();
+
+       $create = $this->produto->create($dataForm);
+
+       if($create) {
+        session()->flash('success', 'Cadastro realizado com sucesso .');
+        return back();
+
+       } else {
+        session()->flash('error', 'Erro ao tentar cadastrar !');
+        return redirect('produto/lista');
+       }
     }
 
     /**

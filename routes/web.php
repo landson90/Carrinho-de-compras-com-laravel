@@ -20,10 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'MyShopp', 'namespace' => 'V1'], function () {
-    
-
     //Criando ROTA para o controller ProdutoController
     Route::get('produto/lista', 'ProdutoController@index')->name('produto.lista');
-    //Route::get('produto/create', 'ProdutoController@stotre')->name('produto.create');
     Route::post('produto/store', 'ProdutoController@store')->name('produto.store');
 });

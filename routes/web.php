@@ -19,7 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'MyShopp', 'namespace' => 'V1'], function () {
+Route::group([
+    'prefix' => 'MyShopp',
+    'middleware'=> 'auth', 
+    'namespace' => 'V1',
+], function () {
     //Criando ROTA para o controller ProdutoController
     Route::get('produto/lista', 'ProdutoController@index')->name('produto.lista');
     Route::post('produto/store', 'ProdutoController@store')->name('produto.store');

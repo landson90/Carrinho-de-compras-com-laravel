@@ -30,4 +30,7 @@ Route::group([
 
     Route::get('cupom/desconto/listar', 'CupomDescontoController@index')->name('cupom.desconto.listar');
     Route::post('cupom/desconto/store', 'CupomDescontoController@store')->name('cupom.desconto.store');
+
+    //Criando as ROTAS para o carrinho de compras
+    Route::get('carrinho/listar', 'CarrinhoController@index')->name('carrinho.listar');
 });

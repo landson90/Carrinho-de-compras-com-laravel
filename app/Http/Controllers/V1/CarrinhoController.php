@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers\V1;
 
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Pedido;
 
 class CarrinhoController extends Controller
 {
+   
+    private $pedido;
+
+    public function __construct(Pedido $pedido)
+    {
+        $this->pedido = $pedido;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,13 @@ class CarrinhoController extends Controller
      */
     public function index()
     {
-        //
+        $pedidos = $this->pedido
+                        ->where([
+                            'status'  => 'RE',
+                            'user_id' => auth()->user()->id 
+                        ])->get();
+    
+        return view('painel.carrinho.index', compact('pedidos'));
     }
 
     /**

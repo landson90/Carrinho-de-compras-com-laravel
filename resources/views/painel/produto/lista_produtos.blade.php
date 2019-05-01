@@ -61,6 +61,7 @@
                   <a href="#" class="badge badge-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                   <a href="#" class="badge badge-warning"><i class="fa fa-eye" aria-hidden="true"></i></a>
                   <a href="#" class="badge badge-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                  <a href="{{route('carrinho.adicionar', $produto->id )}}" class="badge badge-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
               </td>
             </tr>  
             @empty

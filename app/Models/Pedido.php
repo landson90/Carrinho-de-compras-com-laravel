@@ -7,10 +7,12 @@ use App\Models\PedidoProduto;
 
 class Pedido extends Model
 {
+    protected $fillable = ['status', 'user_id'];
+    
     public function pedido_protudos()
     {
         return $this->hasMany(PedidoProduto::class)
-                    ->select(\DB::raw('produto_id, sum(desconto) as descontos, sum(valor) as valores, count(1) as Qtd'))
+                    ->select(\DB::raw('produto_id, sum(desconto) as descontos, sum(valor) as valores, count(1) as qtd'))
                     ->groupBy('produto_id')
                     ->orderBy('produto_id', 'desc');
     }

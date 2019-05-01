@@ -103,4 +103,11 @@ class ProdutoController extends Controller
     {
         //
     }
+
+    public function listaProduto() 
+    {
+        $produtos = $this->produto->all();
+
+        return view('painel.produto.index', compact('produtos'));
+    }
 }

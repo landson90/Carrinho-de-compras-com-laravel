@@ -36,9 +36,13 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
-                       
+                          
                           <ul class="navbar-nav mr-auto">
-                            
+                              
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{route('loja.produtos')}}">Loja <span class="sr-only">(current)</span></a>
+                            </li>
+
                             <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Cadastro
@@ -46,10 +50,12 @@
                               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{route('produto.lista')}}">Protudo</a>
                                 <a class="dropdown-item" href="{{route('cupom.desconto.listar')}}">Cupom de descomto</a>
-                                <a class="dropdown-item" href="{{route('carrinho.listar')}}">Carrinho Compras</a>
                               </div>
                             </li>
                             
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{route('carrinho.listar')}}">Carrinho Compras <span class="sr-only">(current)</span></a>
+                            </li>
                           </ul>  
                     
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">

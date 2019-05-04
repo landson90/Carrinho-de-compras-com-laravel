@@ -67,7 +67,11 @@ class CarrinhoController extends Controller
      */
     public function show($id)
     {
-        //
+        $produto = $this->produto->find($id);
+
+        if($produto):
+            return view('painel.produto.show', compact('produto'));
+        endif;
     }
 
     /**
@@ -103,37 +107,37 @@ class CarrinhoController extends Controller
     {
         //
     }
-
+    
     public function adicionar($id)
     {
-        //  PRIMEIRO PASSO É CRIAR UM PEDIDO
-        //'status', 'valor', 'desconto', 'produto_id', 'pedido_id', 'cupom_desconto_id'
-        
-        $user = auth()->user()->id;
+       $produto = $this->produto->find($id);
+       $user = auth()->user()->id;
 
-        $produto = $this->produto->find($id);
+       $pedidoId = $this->pedido->consultaPedido([
+           'user_id' => $user,
+           'status'  => 'RE'
+       ]);
+       if(empty($pedidoId)):
+           $newPedido =$this->pedido->create([
+               'user_id' => $user,
+               'status'  => 'RE'
+           ]);
 
-        $createPedido = $this->pedido->create([
-            'status'  => 'RE',
-            'user_id' => $user
-        ]);
+            $pedidoId = $newPedido->id;
 
-        $pedidoId = $createPedido->id;
-
-        //  SEGUNDO PASSO É CRIAR UM PEDIDO_PRODUTO
-       
-        $createPedidoProduto = $this->pedidoProduto->create([
-            'status' => 'RE', 
-            'valor'  =>  $produto->valor, 
-            'desconto' => 0, 
-            'produto_id' => $produto->id, 
-            'pedido_id' => $pedidoId,
-        ]);
-
-        if ($createPedido && $createPedidoProduto):
-            $this->index();
         endif;
         
+       $createPedidoProduto =  $this->pedidoProduto->create([
+            'status'        => 'RE',
+            'valor'         =>  $produto->valor, 
+            'produto_id'    =>  $produto->id, 
+            'pedido_id'     =>  $pedidoId,
+        ]);
 
+        if($createPedidoProduto){
+            session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
+            return redirect()->route('carrinho.listar');
+        }
     }
+
 }

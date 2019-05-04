@@ -20,7 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group([
-    'prefix' => 'MyShopp',
+    'prefix' => 'loja',
     'middleware'=> 'auth', 
     'namespace' => 'V1',
 ], function () {
@@ -35,5 +35,6 @@ Route::group([
     //Criando as ROTAS para o carrinho de compras
     Route::get('carrinho/listar', 'CarrinhoController@index')->name('carrinho.listar');
     
+    Route::get('carrinho/show/{value}', 'CarrinhoController@show')->name('carrinho.show');
     Route::get('carrinho/adicionar/{value}', 'CarrinhoController@adicionar')->name('carrinho.adicionar');
 });

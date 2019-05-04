@@ -16,5 +16,11 @@ class Pedido extends Model
                     ->groupBy('produto_id')
                     ->orderBy('produto_id', 'desc');
     }
+
+    public function consultaPedido($value)
+    {
+        $pedido = self::where($value)->first();
+        return !empty($pedido->id)? $pedido->id : null;
+    }
     
 }

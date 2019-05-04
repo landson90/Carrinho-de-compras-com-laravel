@@ -117,8 +117,10 @@ class CarrinhoController extends Controller
            'user_id' => $user,
            'status'  => 'RE'
        ]);
+
        if(empty($pedidoId)):
-           $newPedido =$this->pedido->create([
+
+           $newPedido = $this->pedido->create([
                'user_id' => $user,
                'status'  => 'RE'
            ]);
@@ -140,4 +142,56 @@ class CarrinhoController extends Controller
         }
     }
 
+    public function remover(Request $request)
+    {
+        $dataForm = $request->all();
+
+        $remove_apenas_item = (boolean)$dataForm['item'];
+        
+        $user = auth()->user();
+
+        $pedido = $this->pedido->consultaPedido([
+
+            'user_id' => $user->id,
+            'id'      => $dataForm['pedido_id'],
+            'status'  => 'RE'
+
+        ]);
+
+        if(empty($pedido)) {
+            session()->flash('error', 'Pedido não encontrado !');
+            return redirect()->route('carrinho.listar');
+        }
+
+        $where_produto = [
+            'pedido_id'     => $dataForm['pedido_id'],
+            'produto_id'    => $dataForm['produto_id']
+        ];
+
+        $produto = $this->pedidoProduto->where($where_produto)->orderBy('id', 'desc')->first();
+        
+        if(empty($produto->id)) {
+            session()->flash('error', 'Produto não encontrado no carrinho !');
+            return redirect()->route('carrinho.listar');
+        }
+
+        if($remove_apenas_item) {
+            $where_produto['id'] = $produto->id;
+        }
+       
+        $this->pedidoProduto->where($where_produto)->delete();
+        
+        $check_pedido = $this->pedidoProduto->where([
+            'pedido_id' => $produto->pedido_id
+        ])->exists();
+            
+        if(!$check_pedido) {
+            $this->pedido->where([
+                'id' => $produto->pedido_id
+            ])->delete(); 
+        }
+
+        session()->flash('success', 'Produto removido com sucesso do carrinho !');
+        return redirect()->route('carrinho.listar');
+    }
 }

@@ -12,6 +12,16 @@
         </div>
       
     @endif
+    @if(session()->has('error'))
+      
+        <div class="alert alert-info">
+          <strong>{{session()->get('error')}}</strong>
+          <button  type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      
+    @endif
 </div>
 
   <div class="container">
@@ -46,12 +56,12 @@
                         @foreach ($pedido->pedido_protudos as $pedidosProdutos )
                         <tr>
                           <th scope="row">
-                              <a href="#">
-                                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                              <a href="#" onclick="carrinhoRemoverProduto({{$pedido->id}}, {{$pedidosProdutos->produto_id}}, 1)">
+                                  <i class="fa fa-minus-circle" aria-hidden="true"></i>
                               </a>
                                 <span class="col-lg-4">{{ $pedidosProdutos->qtd }}</span>
                               <a href="#">
-                                  <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
                               </a>
                           </th>
                           <th>
@@ -101,4 +111,19 @@
         </div>
   </div>
 
+  
+<form action="{{route('carrinho.remover')}}" id="form_remover_produto" method="POST" >
+  {!! csrf_field() !!}
+  {{!!method_field('DELETE')!!}}
+  <input type="hidden" name="produto_id">
+  <input type="hidden" name="pedido_id">
+  <input type="hidden" name="item">
+</form>
+<!--
+  <form action="route('carrinho.add')" id="form_adicionar_produto" method="POST" >
+  <input type="hidden" name="id">
+</form>
+-->
+
+<script src="{{asset('js/controlador.js')}}"></script>
 @endsection

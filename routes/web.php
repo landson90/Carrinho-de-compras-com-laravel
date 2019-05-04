@@ -37,4 +37,7 @@ Route::group([
     
     Route::get('carrinho/show/{value}', 'CarrinhoController@show')->name('carrinho.show');
     Route::get('carrinho/adicionar/{value}', 'CarrinhoController@adicionar')->name('carrinho.adicionar');
+
+    Route::delete('carrinho/remover', 'CarrinhoController@remover')->name('carrinho.remover');
+    Route::post('carrinho/remover/', 'CarrinhoController@remover')->name('carrinho.remover');
 });

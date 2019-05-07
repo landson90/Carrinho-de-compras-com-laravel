@@ -56,72 +56,20 @@ class CarrinhoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $dataForm = $request->all();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $produto = $this->produto->find($id);
-
-        if($produto):
-            return view('painel.produto.show', compact('produto'));
-        endif;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    
-    public function adicionar($id)
-    {
-       $produto = $this->produto->find($id);
+       $produto = $this->produto->find($dataForm['produto_id']);
        $user = auth()->user()->id;
 
        $pedidoId = $this->pedido->consultaPedido([
-           'user_id' => $user,
+           'user_id' => $dataForm['user_id'],
            'status'  => 'RE'
        ]);
 
        if(empty($pedidoId)):
 
            $newPedido = $this->pedido->create([
-               'user_id' => $user,
+               'user_id' =>  $dataForm['user_id'],
                'status'  => 'RE'
            ]);
 
@@ -138,7 +86,7 @@ class CarrinhoController extends Controller
 
         if($createPedidoProduto){
             session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
-            return redirect()->route('carrinho.listar');
+            return redirect()->route('carrinho.index');
         }
     }
 
@@ -192,6 +140,161 @@ class CarrinhoController extends Controller
         }
 
         session()->flash('success', 'Produto removido com sucesso do carrinho !');
-        return redirect()->route('carrinho.listar');
+        return redirect()->route('carrinho.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $produto = $this->produto->find($id);
+        $user    = auth()->user();
+       
+        if($produto):
+            return view('painel.produto.show', compact('produto', 'user'));
+        endif;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+    
+    public function adicionar($id)
+    {
+    }
+
+    public function addProduto(Request $request)
+    {
+        
+       $dataForm = $request->all();
+      
+       $produto = $this->produto->find($dataForm['id']);
+
+       $user = auth()->user()->id;
+
+       $pedidoId = $this->pedido->consultaPedido([
+        'user_id' => $user,
+        'status'  => 'RE'
+       ]);
+
+       if(empty($pedidoId)) {
+        $newPedido = $this->pedido->create([
+            'user_id' => $user,
+            'status'  => 'RE'
+        ]);
+
+         $pedidoId = $newPedido->id;
+
+       }
+
+       $createPedidoProduto =  $this->pedidoProduto->create([
+        'status'        => 'RE',
+        'valor'         =>  $produto->valor, 
+        'produto_id'    =>  $produto->id, 
+        'pedido_id'     =>  $pedidoId,
+        ]);
+        
+        dd($createPedidoProduto);
+
+        if($createPedidoProduto){
+            session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
+            return redirect()->route('carrinho.listar');
+        }
+
+
+    }
+
+    public function concluir(Request $request) 
+    {
+        $dataForm           = $request->all();
+        $user               = auth()->user()->id;
+
+        $check_pedido = $this->pedido->where([
+
+            'id'        => $dataForm['pedido_id'],
+            'user_id'   => $user,
+            'status'    => 'RE'
+
+        ]);
+        
+        if(!$check_pedido) {
+            session()->flash('error', 'Pedido não encontrado !');
+            return redirect()->route('carrinho.listar');
+        }
+
+        $check_produtos = $this->pedidoProduto->where([
+            'pedido_id' => $dataForm['pedido_id']
+        ])->exists();
+        
+        if(!$check_produtos) {
+            session()->flash('error', 'Produtos do pedido não encontrados  !');
+            return redirect()->route('carrinho.listar');
+        }
+
+        $this->pedidoProduto->where([
+            'id' => $dataForm['pedido_id']
+        ])->update([
+            'status' => 'PA'
+        ]);
+
+        $this->pedido->where([
+            'id' => $dataForm['pedido_id']
+        ])->update([
+            'status' => 'PA'
+        ]);
+
+        session()->flash('success', 'Compras concluidas com sucesso !  !');
+        return redirect()->route('compras');
+    }
+
+    public function compras() 
+    {
+        $user = auth()->user()->id;
+
+        $compras_pagas = $this->pedido->where([
+            'status' => 'PA',
+            'user_id'   =>  $user
+        ])->orderBy('created_at', 'desc')->get();
+
+        $compras_canceladas = $this->pedido->where([
+            'status' => 'CA',
+            'user_id'   =>  $user
+        ])->orderBy('updated_at', 'desc')->get();
+
+        return view('painel.carrinho.compras', compact('compras_pagas', 'compras_canceladas'));
     }
 }

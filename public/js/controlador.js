@@ -6,7 +6,7 @@ function carrinhoRemoverProduto(pedidoId, produtoId, id){
 }
 
 function carrinhoAdicionarProduto(id) {
-    $('#form_remover_produto input[name = "id"]').val(id);
-    $('#form_remover_produto').submit();
+    $('#form_adicionar_produto input[name = "id"]').val(id);
+    $('#form_adicionar_produto').submit();
 
 }

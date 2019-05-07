@@ -60,7 +60,7 @@
                                   <i class="fa fa-minus-circle" aria-hidden="true"></i>
                               </a>
                                 <span class="col-lg-4">{{ $pedidosProdutos->qtd }}</span>
-                              <a href="#">
+                              <a href="#" onclick="carrinhoAdicionarProduto({{$pedidosProdutos->produto_id}})">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                               </a>
                           </th>
@@ -75,7 +75,7 @@
                           </th>
                           @php
                               $total_produto = $pedidosProdutos->produtos->valor - $pedidosProdutos->descontos;
-                              $total_pedido  += $total_produto
+                              $total_pedido  += $total_produto;
                           @endphp
                           <th>
                               R$:   {{number_format($total_produto, 2, ',', '.')}}
@@ -92,7 +92,11 @@
                         <button class="btn btn-block btn-info">CONTINUAR COMPRANDO</button>
                       </div>
                       <div class="col-lg-4">
-                          <button class="btn btn-block btn-danger">FINALIZAR COMPRA</button>
+                      <form action="{{route('concluir.compras')}}" method="POST">
+                        {!! csrf_field() !!}
+                          <input type="hidden" name="pedido_id" value="{{$pedido->id}}">
+                          <button class="btn btn-block btn-danger" type="submit">CONCLUIR COMPRAS</button>
+                        </form>
                     </div>
                     <div class="jumbotron jumbotron-fluid col-lg-4">
                         <div class="container">
@@ -119,11 +123,12 @@
   <input type="hidden" name="pedido_id">
   <input type="hidden" name="item">
 </form>
-<!--
-  <form action="route('carrinho.add')" id="form_adicionar_produto" method="POST" >
+
+  <form action="{{route('carrinho.produto.adicionar')}}" id="form_adicionar_produto" method="POST" >
+      {!! csrf_field() !!}
   <input type="hidden" name="id">
 </form>
--->
+
 
 <script src="{{asset('js/controlador.js')}}"></script>
 @endsection

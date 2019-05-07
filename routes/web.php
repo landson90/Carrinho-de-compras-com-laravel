@@ -24,7 +24,7 @@ Route::group([
     'middleware'=> 'auth', 
     'namespace' => 'V1',
 ], function () {
-    Route::get('loja/produtos', 'ProdutoController@listaProduto')->name('loja.produtos');
+    Route::get('produtos', 'ProdutoController@listaProduto')->name('produtos');
     //Criando ROTA para o controller ProdutoController
     Route::get('produto/lista', 'ProdutoController@index')->name('produto.lista');
     Route::post('produto/store', 'ProdutoController@store')->name('produto.store');
@@ -33,11 +33,14 @@ Route::group([
     Route::post('cupom/desconto/store', 'CupomDescontoController@store')->name('cupom.desconto.store');
     
     //Criando as ROTAS para o carrinho de compras
-    Route::get('carrinho/listar', 'CarrinhoController@index')->name('carrinho.listar');
+    Route::get('carrinho/index', 'CarrinhoController@index')->name('carrinho.index');
     
     Route::get('carrinho/show/{value}', 'CarrinhoController@show')->name('carrinho.show');
-    Route::get('carrinho/adicionar/{value}', 'CarrinhoController@adicionar')->name('carrinho.adicionar');
+    Route::post('carrinho/store', 'CarrinhoController@store')->name('carrinho.store');
 
     Route::delete('carrinho/remover', 'CarrinhoController@remover')->name('carrinho.remover');
-    Route::post('carrinho/remover/', 'CarrinhoController@remover')->name('carrinho.remover');
+    Route::post('carrinho/produto/adicionar', 'CarrinhoController@addProduto')->name('carrinho.produto.adicionar');
+
+    Route::post('concluir/compras', 'CarrinhoController@concluir')->name('concluir.compras');
+    Route::get('compras', 'CarrinhoController@compras')->name('compras');
 });

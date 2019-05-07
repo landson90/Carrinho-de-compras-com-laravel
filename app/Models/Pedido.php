@@ -17,6 +17,11 @@ class Pedido extends Model
                     ->orderBy('produto_id', 'desc');
     }
 
+    public function pedido_produto_item() 
+    {
+        return $this->hasMany(PedidoProduto::class);
+    }
+    
     public function consultaPedido($value)
     {
         $pedido = self::where($value)->first();

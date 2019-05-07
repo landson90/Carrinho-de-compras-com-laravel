@@ -40,7 +40,7 @@
                           <ul class="navbar-nav mr-auto">
                               
                             <li class="nav-item active">
-                                <a class="nav-link" href="{{route('loja.produtos')}}">Loja <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="{{route('produtos')}}">Loja <span class="sr-only">(current)</span></a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -54,8 +54,12 @@
                             </li>
                             
                             <li class="nav-item active">
-                                <a class="nav-link" href="{{route('carrinho.listar')}}">Carrinho Compras <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="{{route('carrinho.index')}}">Carrinho Compras <span class="sr-only">(current)</span></a>
+                                
                             </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="{{route('compras')}}">Compras <span class="sr-only">(current)</span></a>
+                                </li>
                           </ul>  
                     
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">

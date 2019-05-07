@@ -74,7 +74,7 @@
                               R$:   {{number_format($pedidosProdutos->descontos, 2, ',', '.')}}
                           </th>
                           @php
-                              $total_produto = $pedidosProdutos->produtos->valor - $pedidosProdutos->descontos;
+                              $total_produto = $pedidosProdutos->valores - $pedidosProdutos->descontos;
                               $total_pedido  += $total_produto;
                           @endphp
                           <th>
